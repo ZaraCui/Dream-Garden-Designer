@@ -3,43 +3,167 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dream Garden Designer</title>
+    <title>DreamGarden AI</title>
+
+    <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
     <style>
       body {
-        font-family: 'Plus Jakarta Sans', sans-serif;
-        background-color: #f0fdf4; /* green-50 */
-      }
-      /* Custom scrollbar for better aesthetics */
-      ::-webkit-scrollbar {
-        width: 8px;
-      }
-      ::-webkit-scrollbar-track {
-        background: #f1f1f1;
-      }
-      ::-webkit-scrollbar-thumb {
-        background: #86efac;
-        border-radius: 4px;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #4ade80;
+        font-family: "Plus Jakarta Sans", sans-serif;
+        background-color: #f0fdf4;
       }
     </style>
-  <script type="importmap">
-{
-  "imports": {
-    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.32.0",
-    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.556.0",
-    "react/": "https://aistudiocdn.com/react@^19.2.1/",
-    "react": "https://aistudiocdn.com/react@^19.2.1",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.1/"
-  }
-}
-</script>
-</head>
+
+    <!-- Import React (esm.sh is reliable on Vercel) -->
+    <script type="importmap">
+      {
+        "imports": {
+          "react": "https://esm.sh/react@19.0.0",
+          "react-dom/client": "https://esm.sh/react-dom@19.0.0/client"
+        }
+      }
+    </script>
+  </head>
+
   <body>
     <div id="root"></div>
-    <script type="module" src="./index.tsx"></script>
+
+    <script type="module">
+      import React from "react";
+      import { createRoot } from "react-dom/client";
+
+      function App() {
+        return (
+          React.createElement("div", { className: "" }, [
+
+            /* ---------------- Top Navigation Bar ---------------- */
+            React.createElement(
+              "nav",
+              { className: "w-full bg-white shadow-sm px-6 py-4 flex justify-between items-center" },
+              [
+                React.createElement(
+                  "div",
+                  { className: "flex items-center space-x-3" },
+                  [
+                    React.createElement("div", { className: "w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center text-white font-bold" }, "🌿"),
+                    React.createElement("span", { className: "text-xl font-semibold text-gray-800" }, "DreamGarden AI")
+                  ]
+                ),
+                React.createElement(
+                  "span",
+                  { className: "text-sm text-gray-500" },
+                  "Powered by Gemini 2.5 Flash"
+                )
+              ]
+            ),
+
+            /* ---------------- Hero Section ---------------- */
+            React.createElement(
+              "section",
+              { className: "text-center mt-16 px-6" },
+              [
+                React.createElement(
+                  "h1",
+                  { className: "text-5xl font-bold text-gray-900 leading-tight" },
+                  [
+                    "Design Your ",
+                    React.createElement("span", { className: "text-green-600" }, "Perfect Sanctuary")
+                  ]
+                ),
+                React.createElement(
+                  "p",
+                  { className: "text-gray-600 mt-4 text-lg max-w-2xl mx-auto" },
+                  "Describe your dream space, and let our AI generate a professional layout, plant selection, and visualization in seconds."
+                )
+              ]
+            ),
+
+            /* ---------------- Form Card ---------------- */
+            React.createElement(
+              "div",
+              { className: "max-w-5xl mx-auto mt-14 bg-white shadow-md rounded-2xl overflow-hidden" },
+              [
+                /* Header bar */
+                React.createElement(
+                  "div",
+                  { className: "bg-green-600 text-white px-6 py-4 text-xl font-semibold flex items-center space-x-2" },
+                  [
+                    React.createElement("span", null, "🍃"),
+                    React.createElement("span", null, "Define Your Dream Garden")
+                  ]
+                ),
+
+                /* Form Section */
+                React.createElement(
+                  "div",
+                  { className: "p-8 grid grid-cols-1 md:grid-cols-2 gap-6" },
+                  [
+
+                    /* Garden Style */
+                    React.createElement("div", null, [
+                      React.createElement("label", { className: "font-semibold text-gray-700" }, "Garden Style"),
+                      React.createElement(
+                        "select",
+                        { className: "mt-2 w-full p-3 border rounded-lg" },
+                        [
+                          React.createElement("option", null, "English Cottage"),
+                          React.createElement("option", null, "Minimal Zen"),
+                          React.createElement("option", null, "Tropical Paradise"),
+                          React.createElement("option", null, "Modern Clean Lines")
+                        ]
+                      )
+                    ]),
+
+                    /* Garden Size */
+                    React.createElement("div", null, [
+                      React.createElement("label", { className: "font-semibold text-gray-700" }, "Garden Size"),
+                      React.createElement(
+                        "select",
+                        { className: "mt-2 w-full p-3 border rounded-lg" },
+                        [
+                          React.createElement("option", null, "Small (under 200 sq ft)"),
+                          React.createElement("option", null, "Medium Suburban Yard"),
+                          React.createElement("option", null, "Large Open Space")
+                        ]
+                      )
+                    ]),
+
+                    /* Sunlight */
+                    React.createElement("div", null, [
+                      React.createElement("label", { className: "font-semibold text-gray-700" }, "Sunlight Conditions"),
+                      React.createElement(
+                        "select",
+                        { className: "mt-2 w-full p-3 border rounded-lg" },
+                        [
+                          React.createElement("option", null, "Full Sun (6+ hours)"),
+                          React.createElement("option", null, "Partial Sun"),
+                          React.createElement("option", null, "Shade")
+                        ]
+                      )
+                    ]),
+
+                    /* Hardiness Zone */
+                    React.createElement("div", null, [
+                      React.createElement("label", { className: "font-semibold text-gray-700" }, "Hardiness Zone (Optional)"),
+                      React.createElement("input", {
+                        className: "mt-2 w-full p-3 border rounded-lg",
+                        placeholder: "e.g., 7b, 9a"
+                      })
+                    ])
+                  ]
+                )
+              ]
+            )
+          ])
+        );
+      }
+
+      const root = createRoot(document.getElementById("root"));
+      root.render(React.createElement(App));
+    </script>
   </body>
 </html>

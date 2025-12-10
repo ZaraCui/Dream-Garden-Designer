@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { GardenPlan } from '../types';
-import { Download, Wand2, RefreshCw, Sparkles, Map, Sprout, Info } from 'lucide-react';
+import { Download, Wand2, RefreshCw, Sparkles, Map, Sprout, Info, Globe, ExternalLink } from 'lucide-react';
 import { editGardenVisual } from '../services/geminiService';
 
 interface GardenResultProps {
@@ -159,6 +159,31 @@ export const GardenResult: React.FC<GardenResultProps> = ({ plan, initialImage, 
               ))}
             </ul>
           </div>
+          
+          {/* Web Sources / Grounding */}
+          {plan.searchSources && plan.searchSources.length > 0 && (
+            <div className="bg-white p-6 rounded-2xl shadow-md border border-green-50">
+              <h3 className="text-lg font-bold text-green-800 mb-4 flex items-center gap-2">
+                <Globe className="w-5 h-5" /> From the Web
+              </h3>
+              <div className="flex flex-col gap-3">
+                {plan.searchSources.map((source, idx) => (
+                  <a 
+                    key={idx} 
+                    href={source.uri} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="flex items-center gap-3 p-3 rounded-xl border border-gray-100 hover:bg-green-50 hover:border-green-200 transition-all group"
+                  >
+                    <div className="bg-green-100 p-2 rounded-lg text-green-600 group-hover:bg-green-200 transition-colors">
+                      <ExternalLink className="w-4 h-4" />
+                    </div>
+                    <span className="text-sm font-medium text-gray-700 truncate flex-1">{source.title}</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
 
         </div>
       </div>

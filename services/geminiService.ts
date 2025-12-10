@@ -1,11 +1,12 @@
 import { GoogleGenAI, Type } from "@google/genai";
-import { GardenPreferences, GardenPlan } from "../types";
+import { GardenPreferences, GardenPlan, SearchSource } from "../types";
 
 // Initialize Gemini Client
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 /**
  * Generates a structured JSON plan for the garden based on user preferences.
+ * Uses Google Search Grounding to find real-world resources.
  */
 export const generateGardenPlan = async (prefs: GardenPreferences): Promise<GardenPlan> => {
   const prompt = `Create a detailed garden plan for a ${prefs.size} garden in ${prefs.style} style. 
@@ -14,41 +15,59 @@ export const generateGardenPlan = async (prefs: GardenPreferences): Promise<Gard
   ${prefs.colors ? `Preferred Colors: ${prefs.colors}.` : ''}
   ${prefs.extraNotes ? `Additional Notes: ${prefs.extraNotes}` : ''}
   
-  Provide a catchy title, a general description, a list of 5 suitable plants with care levels, and 3 layout tips.`;
+  Provide a catchy title, a general description, a list of 5 suitable plants with care levels, and 3 layout tips.
+
+  IMPORTANT: Return the response strictly as a valid JSON object. Do not use Markdown formatting or code blocks.
+  The JSON must match this structure exactly:
+  {
+    "title": "string",
+    "description": "string",
+    "plants": [
+      { "name": "string", "description": "string", "careLevel": "Easy" | "Moderate" | "Difficult" }
+    ],
+    "layoutTips": ["string"]
+  }`;
 
   const response = await ai.models.generateContent({
     model: "gemini-2.5-flash",
     contents: prompt,
     config: {
-      responseMimeType: "application/json",
-      responseSchema: {
-        type: Type.OBJECT,
-        properties: {
-          title: { type: Type.STRING },
-          description: { type: Type.STRING },
-          plants: {
-            type: Type.ARRAY,
-            items: {
-              type: Type.OBJECT,
-              properties: {
-                name: { type: Type.STRING },
-                description: { type: Type.STRING },
-                careLevel: { type: Type.STRING, enum: ['Easy', 'Moderate', 'Difficult'] }
-              }
-            }
-          },
-          layoutTips: {
-            type: Type.ARRAY,
-            items: { type: Type.STRING }
-          }
-        }
-      }
+      // We use the googleSearch tool to get real web pages related to the garden
+      tools: [{ googleSearch: {} }],
+      // responseMimeType and responseSchema are NOT allowed when using googleSearch, 
+      // so we rely on the prompt to get JSON.
     }
   });
 
   const text = response.text;
   if (!text) throw new Error("No plan generated");
-  return JSON.parse(text) as GardenPlan;
+
+  // Clean the text to ensure it's valid JSON (sometimes models add markdown blocks despite instructions)
+  const cleanJson = text.replace(/```json/g, '').replace(/```/g, '').trim();
+  
+  let plan: GardenPlan;
+  try {
+    plan = JSON.parse(cleanJson) as GardenPlan;
+  } catch (e) {
+    console.error("Failed to parse JSON", cleanJson);
+    throw new Error("Failed to generate a valid plan format. Please try again.");
+  }
+
+  // Extract grounding metadata (search results)
+  const chunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks || [];
+  const searchSources: SearchSource[] = [];
+
+  for (const chunk of chunks) {
+    if (chunk.web?.uri && chunk.web?.title) {
+      searchSources.push({
+        title: chunk.web.title,
+        uri: chunk.web.uri
+      });
+    }
+  }
+
+  plan.searchSources = searchSources;
+  return plan;
 };
 
 /**

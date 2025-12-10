@@ -35,9 +35,15 @@ export interface PlantRecommendation {
   careLevel: 'Easy' | 'Moderate' | 'Difficult';
 }
 
+export interface SearchSource {
+  title: string;
+  uri: string;
+}
+
 export interface GardenPlan {
   title: string;
   description: string;
   plants: PlantRecommendation[];
   layoutTips: string[];
+  searchSources?: SearchSource[];
 }

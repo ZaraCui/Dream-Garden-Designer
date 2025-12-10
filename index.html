@@ -18,7 +18,7 @@
       }
     </style>
 
-    <!-- Import React (esm.sh is reliable on Vercel) -->
+    <!-- Import React (Vercel-safe) -->
     <script type="importmap">
       {
         "imports": {
@@ -29,67 +29,62 @@
     </script>
   </head>
 
-  <body>
+  <body class="min-h-screen">
     <div id="root"></div>
 
     <script type="module">
-      import React from "react";
+      import React, { useState } from "react";
       import { createRoot } from "react-dom/client";
 
       function App() {
-        return (
-          React.createElement("div", { className: "" }, [
+        const [result, setResult] = useState("");
 
-            /* ---------------- Top Navigation Bar ---------------- */
-            React.createElement(
-              "nav",
+        function generateLayout() {
+          setResult("Generating garden layout... (AI output will appear here)");
+        }
+
+        return (
+          React.createElement("div", {}, [
+
+            /* ---------------- NAVBAR ---------------- */
+            React.createElement("nav",
               { className: "w-full bg-white shadow-sm px-6 py-4 flex justify-between items-center" },
               [
-                React.createElement(
-                  "div",
-                  { className: "flex items-center space-x-3" },
+                React.createElement("div", { className: "flex items-center space-x-3" },
                   [
                     React.createElement("div", { className: "w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center text-white font-bold" }, "🌿"),
                     React.createElement("span", { className: "text-xl font-semibold text-gray-800" }, "DreamGarden AI")
                   ]
                 ),
-                React.createElement(
-                  "span",
-                  { className: "text-sm text-gray-500" },
-                  "Powered by Gemini 2.5 Flash"
-                )
+                React.createElement("span", { className: "text-sm text-gray-500" }, "Powered by Gemini 2.5 Flash")
               ]
             ),
 
-            /* ---------------- Hero Section ---------------- */
-            React.createElement(
-              "section",
+            /* ---------------- HERO SECTION ---------------- */
+            React.createElement("section",
               { className: "text-center mt-16 px-6" },
               [
-                React.createElement(
-                  "h1",
+                React.createElement("h1",
                   { className: "text-5xl font-bold text-gray-900 leading-tight" },
                   [
                     "Design Your ",
                     React.createElement("span", { className: "text-green-600" }, "Perfect Sanctuary")
                   ]
                 ),
-                React.createElement(
-                  "p",
+                React.createElement("p",
                   { className: "text-gray-600 mt-4 text-lg max-w-2xl mx-auto" },
-                  "Describe your dream space, and let our AI generate a professional layout, plant selection, and visualization in seconds."
+                  "Tell us about your garden space and let our AI generate a professional layout, plant selection, and visualization."
                 )
               ]
             ),
 
-            /* ---------------- Form Card ---------------- */
-            React.createElement(
-              "div",
+            /* ---------------- FORM CARD ---------------- */
+            React.createElement("div",
               { className: "max-w-5xl mx-auto mt-14 bg-white shadow-md rounded-2xl overflow-hidden" },
               [
+
                 /* Header bar */
-                React.createElement(
-                  "div",
+                React.createElement("div",
                   { className: "bg-green-600 text-white px-6 py-4 text-xl font-semibold flex items-center space-x-2" },
                   [
                     React.createElement("span", null, "🍃"),
@@ -97,64 +92,95 @@
                   ]
                 ),
 
-                /* Form Section */
-                React.createElement(
-                  "div",
+                /* Form content */
+                React.createElement("div",
                   { className: "p-8 grid grid-cols-1 md:grid-cols-2 gap-6" },
                   [
 
                     /* Garden Style */
-                    React.createElement("div", null, [
-                      React.createElement("label", { className: "font-semibold text-gray-700" }, "Garden Style"),
-                      React.createElement(
-                        "select",
-                        { className: "mt-2 w-full p-3 border rounded-lg" },
-                        [
-                          React.createElement("option", null, "English Cottage"),
-                          React.createElement("option", null, "Minimal Zen"),
-                          React.createElement("option", null, "Tropical Paradise"),
-                          React.createElement("option", null, "Modern Clean Lines")
-                        ]
-                      )
-                    ]),
+                    React.createElement("div", {},
+                      [
+                        React.createElement("label", { className: "font-semibold text-gray-700" }, "Garden Style"),
+                        React.createElement("select",
+                          { className: "mt-2 w-full p-3 border rounded-lg" },
+                          [
+                            React.createElement("option", null, "English Cottage"),
+                            React.createElement("option", null, "Minimal Zen"),
+                            React.createElement("option", null, "Modern Japanese"),
+                            React.createElement("option", null, "Tropical Paradise"),
+                            React.createElement("option", null, "Modern Clean Lines")
+                          ]
+                        )
+                      ]
+                    ),
 
                     /* Garden Size */
-                    React.createElement("div", null, [
-                      React.createElement("label", { className: "font-semibold text-gray-700" }, "Garden Size"),
-                      React.createElement(
-                        "select",
-                        { className: "mt-2 w-full p-3 border rounded-lg" },
-                        [
-                          React.createElement("option", null, "Small (under 200 sq ft)"),
-                          React.createElement("option", null, "Medium Suburban Yard"),
-                          React.createElement("option", null, "Large Open Space")
-                        ]
-                      )
-                    ]),
+                    React.createElement("div", {},
+                      [
+                        React.createElement("label", { className: "font-semibold text-gray-700" }, "Garden Size"),
+                        React.createElement("select",
+                          { className: "mt-2 w-full p-3 border rounded-lg" },
+                          [
+                            React.createElement("option", null, "Small Patio"),
+                            React.createElement("option", null, "Medium Suburban Yard"),
+                            React.createElement("option", null, "Large Open Space")
+                          ]
+                        )
+                      ]
+                    ),
 
                     /* Sunlight */
-                    React.createElement("div", null, [
-                      React.createElement("label", { className: "font-semibold text-gray-700" }, "Sunlight Conditions"),
-                      React.createElement(
-                        "select",
-                        { className: "mt-2 w-full p-3 border rounded-lg" },
-                        [
-                          React.createElement("option", null, "Full Sun (6+ hours)"),
-                          React.createElement("option", null, "Partial Sun"),
-                          React.createElement("option", null, "Shade")
-                        ]
-                      )
-                    ]),
+                    React.createElement("div", {},
+                      [
+                        React.createElement("label", { className: "font-semibold text-gray-700" }, "Sunlight"),
+                        React.createElement("select",
+                          { className: "mt-2 w-full p-3 border rounded-lg" },
+                          [
+                            React.createElement("option", null, "Full Sun (6+ hours)"),
+                            React.createElement("option", null, "Partial Sun (3–6 hours)"),
+                            React.createElement("option", null, "Shade")
+                          ]
+                        )
+                      ]
+                    ),
 
                     /* Hardiness Zone */
-                    React.createElement("div", null, [
-                      React.createElement("label", { className: "font-semibold text-gray-700" }, "Hardiness Zone (Optional)"),
-                      React.createElement("input", {
-                        className: "mt-2 w-full p-3 border rounded-lg",
-                        placeholder: "e.g., 7b, 9a"
-                      })
-                    ])
+                    React.createElement("div", {},
+                      [
+                        React.createElement("label", { className: "font-semibold text-gray-700" }, "Hardiness Zone (Optional)"),
+                        React.createElement("input",
+                          { placeholder: "e.g., 7b, 9a", className: "mt-2 w-full p-3 border rounded-lg" }
+                        )
+                      ]
+                    )
                   ]
+                ),
+
+                /* Generate Button */
+                React.createElement("div",
+                  { className: "px-8 pb-8 flex justify-center" },
+                  [
+                    React.createElement("button",
+                      {
+                        className:
+                          "bg-green-600 hover:bg-green-700 text-white font-semibold px-8 py-3 rounded-lg shadow-md transition",
+                        onClick: generateLayout
+                      },
+                      "Generate Layout"
+                    )
+                  ]
+                )
+              ]
+            ),
+
+            /* ---------------- RESULT SECTION ---------------- */
+            React.createElement("div",
+              { className: "max-w-4xl mx-auto mt-10 mb-20" },
+              [
+                React.createElement("h2", { className: "text-2xl font-semibold mb-4 text-gray-800" }, "AI-Generated Garden Plan"),
+                React.createElement("div",
+                  { className: "bg-white rounded-xl shadow p-6 min-h-[120px] text-gray-700" },
+                  result || "Your garden plan will appear here."
                 )
               ]
             )
